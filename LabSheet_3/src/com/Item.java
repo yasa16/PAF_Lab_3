@@ -123,9 +123,11 @@ public class Item {
     		  
     	     //Buttons
     		 output += "<td><input name='btnUpdate' type='button' value='Update' class='btn btn-primary'></td>"
-    			   +  "<td><form method='post' action='item.jsp'>"
-    			   + "<input name='btnRemove' type='submit' value='Remove' class='btn btn-primary'>";	   		  
-    		       
+    			   +  "<td><form method='post' action='Item.jsp'>"
+    			   + "<input name='btnRemove' type='submit' value='Remove' class='btn btn-primary'>"	   		  
+    		 + "<input name='itemID' type='hidden' value='" + itemID + "'>" +
+    		 "</form></td></tr>";
+
     	    }
     	    
     	   
@@ -147,7 +149,36 @@ public class Item {
        
 
 }
-       
+       public String deleteItem(String itemID)
+       {
+        String output = "";
+       try
+        {
+        Connection connection = getConnection();
+        if (connection == null)
+        {
+        	
+        return "Error while connecting to the database for deleting.";
+        
+        }
+        // create a prepared statement
+        String query = "delete from items where itemID=?";
+        PreparedStatement preparedStmt = connection.prepareStatement(query);
+        // binding values
+        preparedStmt.setInt(1, Integer.parseInt(itemID));
+
+        // execute the statement
+        preparedStmt.execute();
+        connection.close();
+        output = "Deleted successfully";
+        }
+       catch (Exception e)
+        {
+        output = "Error while deleting the item.";
+        System.err.println(e.getMessage());
+        }
+       return output;
+       }
  
        
 	     
